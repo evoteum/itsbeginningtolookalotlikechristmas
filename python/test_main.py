@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 from datetime import datetime
-from src.spotify import get_data, get_popularity
+from python.main import get_data, get_popularity
 
 
 @pytest.fixture
@@ -9,7 +9,7 @@ def mock_response():
     return {"popularity": 75}
 
 
-@patch("src.spotify.get_data")
+@patch("python.main.get_data")
 def test_get_data(mock_get_data, mock_response):
     mock_get_data.return_value.json.return_value = mock_response
     client_id = "test_client_id"
@@ -21,7 +21,7 @@ def test_get_data(mock_get_data, mock_response):
     assert "popularity" in response.json()
 
 
-@patch("src.spotify.get_data")
+@patch("python.main.get_data")
 def test_get_popularity(mock_get_data, mock_response):
     mock_get_data.return_value.json.return_value = mock_response
 
