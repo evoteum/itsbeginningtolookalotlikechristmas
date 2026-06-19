@@ -73,9 +73,12 @@ polling the Spotify API every day to get the popularity of track ID
 this and chuck it at a pretty graph. Grab some Eggnog and watch Christmas cheer gradually spread
 throughout the land.
 
-GitHub Actions is used to run the python script that gets the data. GitHub pages then displays the page.
-This is not how one would likely want to structure the infrastructure for an enterprise application, but
-this works for now.
+A `CronJob` running in the [kubernetes-lab-services](https://github.com/evoteum/kubernetes-lab-services)
+cluster (Helm chart in [`chart/`](chart/)) runs a pre-built image of `python/main.py` (built and
+pushed to Quay by the `container-build-and-push` workflow) to fetch the data, then pushes the updated
+`data.csv` back to this repo, keeping the data in git. The same chart deploys an nginx pod that
+serves the static site, kept fresh by a `git-sync` sidecar; a Cloudflare Tunnel routes public
+traffic to it.
 
 ### Future improvements
 
@@ -114,7 +117,7 @@ The motivation for this project is that it is,
 If running locally, install the Python requirements
 
 ```shell
-pip install -r src/requirements.txt
+pip install -r python/requirements.txt
 ```
 
 ## Usage
@@ -162,3 +165,5 @@ PRs are welcome. My only request is that everyone should "Be excellent to each o
 - This is licensed under the GNU General Public License v3.0.
 - The license owner is [James Geddes](https://jamesgeddes.pro/).
 - The full text of the license can be found in the [LICENSE](LICENSE) file.
+
+
