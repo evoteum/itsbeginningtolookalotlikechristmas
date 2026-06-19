@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: openbao-secret-init
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: openbao-secret-init
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: "{{ .Values.openbao.image.repository }}:{{ .Values.openbao.image.tag }}"
+          command:
+            - /bin/sh
+            - /scripts/init.sh
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+      volumes:
+        - name: scripts
+          configMap:
+            name: openbao-secret-init
+            defaultMode: 0755

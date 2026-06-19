@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openbao-secret-init
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+data:
+  # There is no native Kubernetes/Helm mechanism for declaring external secret
+  # prerequisites. This script is a pragmatic workaround: it creates empty KV
+  # paths in OpenBao so the operator knows exactly which keys to populate before
+  # the app will start. It is idempotent — keys with real values are never touched.
+  init.sh: |
+    #!/bin/sh
+    set -eu
+
+    export VAULT_ADDR="{{ .Values.openbao.address }}"
+    SA_JWT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    export VAULT_TOKEN=$(bao write -field=token \
+      "auth/{{ .Values.openbao.authPath }}/login" \
+      role="{{ .Values.openbao.role }}" \
+      jwt="$SA_JWT")
+    {{ range .Values.openbao.requiredSecrets }}
+    {{- $path := .path }}
+    if bao kv get "{{ $path }}" > /dev/null 2>&1; then
+      {{- range .keys }}
+      if ! bao kv get -field="{{ . }}" "{{ $path }}" > /dev/null 2>&1; then
+        bao kv patch "{{ $path }}" "{{ . }}="
+        echo "Added missing key '{{ . }}' to {{ $path }}"
+      else
+        echo "Key '{{ . }}' already exists in {{ $path }}, skipping"
+      fi
+      {{- end }}
+    else
+      bao kv put "{{ $path }}"{{ range .keys }} {{ . }}=""{{ end }}
+      echo "Created {{ $path }}"
+    fi
+    {{ end }}

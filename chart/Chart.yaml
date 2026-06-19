@@ -1,0 +1,5 @@
+apiVersion: v2
+name: itsbeginningtolookalotlikechristmas
+description: Graphing Christmasyness over time
+type: application
+version: 0.1.0

@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: datagather
+spec:
+  schedule: {{ .Values.datagather.schedule | quote }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app: datagather
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: workspace
+              emptyDir: {}
+            - name: git-ssh-key
+              secret:
+                secretName: git-deploy-key
+                defaultMode: 0400
+          initContainers:
+            - name: clone-repo
+              image: {{ .Values.git.image.repository }}:{{ .Values.git.image.tag }}
+              command:
+                - sh
+                - -c
+                - |
+                  set -eu
+                  mkdir -p ~/.ssh
+                  cp /etc/git-secret/ssh_privatekey ~/.ssh/id_ed25519
+                  chmod 600 ~/.ssh/id_ed25519
+                  ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+                  git clone --depth 1 {{ .Values.datagather.git.repo }} /workspace
+              volumeMounts:
+                - name: workspace
+                  mountPath: /workspace
+                - name: git-ssh-key
+                  mountPath: /etc/git-secret
+                  readOnly: true
+            - name: fetch-popularity
+              image: {{ .Values.datagather.image.repository }}:{{ .Values.datagather.image.tag }}
+              workingDir: /workspace
+              env:
+                - name: SPOTIFY_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: spotify-credentials
+                      key: client_id
+                - name: SPOTIFY_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: spotify-credentials
+                      key: client_secret
+              volumeMounts:
+                - name: workspace
+                  mountPath: /workspace
+          containers:
+            - name: commit-and-push
+              image: {{ .Values.git.image.repository }}:{{ .Values.git.image.tag }}
+              workingDir: /workspace
+              command:
+                - sh
+                - -c
+                - |
+                  set -eu
+                  mkdir -p ~/.ssh
+                  cp /etc/git-secret/ssh_privatekey ~/.ssh/id_ed25519
+                  chmod 600 ~/.ssh/id_ed25519
+                  ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+                  git config user.name {{ .Values.datagather.git.user.name | quote }}
+                  git config user.email {{ .Values.datagather.git.user.email | quote }}
+                  git add data.csv
+                  git diff --cached --quiet || (git commit -m "Update data.csv with daily popularity" && git push)
+              volumeMounts:
+                - name: workspace
+                  mountPath: /workspace
+                - name: git-ssh-key
+                  mountPath: /etc/git-secret
+                  readOnly: true

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+        listen 8080;
+        server_tokens off;
+        root /data/current;
+        index index.html;
+
+        add_header X-Content-Type-Options "nosniff";
+        add_header X-Frame-Options "DENY";
+        add_header Referrer-Policy "strict-origin-when-cross-origin";
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(js|css)$ {
+            expires 1h;
+            add_header Cache-Control "public";
+        }
+
+        location = /data.csv {
+            expires 5m;
+            add_header Cache-Control "public";
+        }
+    }

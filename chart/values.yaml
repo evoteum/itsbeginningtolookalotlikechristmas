@@ -1,0 +1,55 @@
+datagather:
+  schedule: "0 0 * * *"
+  image:
+    repository: quay.io/evoteum/itsbeginningtolookalotlikechristmas
+    tag: latest
+  git:
+    repo: git@github.com:evoteum/itsbeginningtolookalotlikechristmas.git
+    user:
+      name: itsbeginningtolookalotlikechristmas-bot
+      email: k8s-bot@evoteum.com
+
+site:
+  replicaCount: 3
+  nginx:
+    image:
+      repository: nginxinc/nginx-unprivileged
+      tag: alpine
+  gitSync:
+    image:
+      repository: registry.k8s.io/git-sync/git-sync
+      tag: v4.3.0
+    repo: https://github.com/evoteum/itsbeginningtolookalotlikechristmas.git
+    period: 60s
+  hpa:
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  cloudflared:
+    replicaCount: 2
+    image:
+      repository: cloudflare/cloudflared
+      tag: 2024.11.0
+
+git:
+  image:
+    repository: alpine/git
+    tag: 2.47.1
+
+openbao:
+  address: http://openbao-active.openbao.svc:8200
+  authPath: kubernetes
+  role: secret-initializer
+  image:
+    repository: ghcr.io/openbao/openbao
+    tag: "2"
+  requiredSecrets:
+    - path: itsbeginningtolookalotlikechristmas/spotify
+      keys:
+        - client_id
+        - client_secret
+    - path: itsbeginningtolookalotlikechristmas/git-deploy-key
+      keys:
+        - ssh_privatekey
+    - path: itsbeginningtolookalotlikechristmas/cloudflare-tunnel
+      keys:
+        - token
