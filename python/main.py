@@ -20,9 +20,7 @@ def get_data(client_id, client_secret, song_id):
     access_token = auth_response.json()["access_token"]
 
     headers = {"Authorization": f"Bearer {access_token}"}
-    response = get(
-        f"https://api.spotify.com/v1/tracks/{song_id}", headers=headers
-    )
+    response = get(f"https://api.spotify.com/v1/tracks/{song_id}", headers=headers)
     response.raise_for_status()
     return response
 
@@ -46,7 +44,6 @@ def main():
     timestamp_popularity = f"{datetime.now().isoformat()}, {popularity}\n"
     with open(data_file_name, "a") as file:
         file.write(timestamp_popularity)
-
 
 
 if __name__ == "__main__":
