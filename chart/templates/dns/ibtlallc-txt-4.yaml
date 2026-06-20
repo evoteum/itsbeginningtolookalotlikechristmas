@@ -1,0 +1,17 @@
+apiVersion: dns.cloudflare.crossplane.io/v1alpha1
+kind: DNSRecord
+metadata:
+  name: ibtlallc-txt-4
+  namespace: {{ .Release.Namespace }}
+spec:
+  providerConfigRef:
+    name: cloudflare
+  forProvider:
+    zoneIdRef:
+      name: itsbeginningtolookalotlike-christmas
+    name: itsbeginningtolookalotlike.christmas
+    type: TXT
+    content: "IBTLALLC remains a holiday favourite and is streamed millions of times each Christmas season."
+    proxied: false
+    ttl: 1
+

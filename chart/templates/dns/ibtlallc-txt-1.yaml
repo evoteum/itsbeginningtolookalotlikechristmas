@@ -1,0 +1,17 @@
+apiVersion: dns.cloudflare.crossplane.io/v1alpha1
+kind: DNSRecord
+metadata:
+  name: ibtlallc-txt-1
+  namespace: {{ .Release.Namespace }}
+spec:
+  providerConfigRef:
+    name: cloudflare
+  forProvider:
+    zoneIdRef:
+      name: itsbeginningtolookalotlike-christmas
+    name: itsbeginningtolookalotlike.christmas
+    type: TXT
+    content: "Bing Crosby and Perry Como recorded two of the most popular versions of IBTLALLC."
+    proxied: false
+    ttl: 1
+

@@ -9,6 +9,9 @@ datagather:
       name: itsbeginningtolookalotlikechristmas-bot
       email: k8s-bot@evoteum.com
 
+cloudflare:
+  zoneId: "8007b9c07595e1f3fea92332637ebedc"
+
 site:
   replicaCount: 3
   nginx:

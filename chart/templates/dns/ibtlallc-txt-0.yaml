@@ -1,0 +1,17 @@
+apiVersion: dns.cloudflare.crossplane.io/v1alpha1
+kind: DNSRecord
+metadata:
+  name: ibtlallc-txt-0
+  namespace: {{ .Release.Namespace }}
+spec:
+  providerConfigRef:
+    name: cloudflare
+  forProvider:
+    zoneIdRef:
+      name: itsbeginningtolookalotlike-christmas
+    name: itsbeginningtolookalotlike.christmas
+    type: TXT
+    content: "IBTLALLC was first released in 1951 by composer Meredith Willson."
+    proxied: false
+    ttl: 1
+

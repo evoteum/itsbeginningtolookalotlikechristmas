@@ -1,0 +1,17 @@
+apiVersion: dns.cloudflare.crossplane.io/v1alpha1
+kind: DNSRecord
+metadata:
+  name: ibtlallc-txt-8
+  namespace: {{ .Release.Namespace }}
+spec:
+  providerConfigRef:
+    name: cloudflare
+  forProvider:
+    zoneIdRef:
+      name: itsbeginningtolookalotlike-christmas
+    name: itsbeginningtolookalotlike.christmas
+    type: TXT
+    content: "Thanks for taking the time to explore the IBTLALLC project!"
+    proxied: false
+    ttl: 1
+
