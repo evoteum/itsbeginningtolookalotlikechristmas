@@ -1,35 +1,42 @@
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from datetime import datetime
 from python.main import get_data, get_popularity
 
 
 @pytest.fixture
-def mock_response():
-    return {"popularity": 75}
+def mock_auth_response():
+    mock = MagicMock()
+    mock.json.return_value = {"access_token": "test_token"}
+    return mock
 
 
-@patch("python.main.get_data")
-def test_get_data(mock_get_data, mock_response):
-    mock_get_data.return_value.json.return_value = mock_response
-    client_id = "test_client_id"
-    client_secret = "test_client_secret"
-    song_id = "test_song_id"
+@pytest.fixture
+def mock_track_response():
+    mock = MagicMock()
+    mock.json.return_value = {"popularity": 75}
+    return mock
 
-    response = get_data(client_id, client_secret, song_id)
+
+@patch("python.main.get")
+@patch("python.main.post")
+def test_get_data(mock_post, mock_get, mock_auth_response, mock_track_response):
+    mock_post.return_value = mock_auth_response
+    mock_get.return_value = mock_track_response
+
+    response = get_data("test_client_id", "test_client_secret", "test_song_id")
+
     assert response is not None
     assert "popularity" in response.json()
 
 
-@patch("python.main.get_data")
-def test_get_popularity(mock_get_data, mock_response):
-    mock_get_data.return_value.json.return_value = mock_response
+@patch("python.main.get")
+@patch("python.main.post")
+def test_get_popularity(mock_post, mock_get, mock_auth_response, mock_track_response):
+    mock_post.return_value = mock_auth_response
+    mock_get.return_value = mock_track_response
 
-    client_id = "test_client_id"
-    client_secret = "test_client_secret"
-    song_id = "test_song_id"
-
-    popularity = get_popularity(client_id, client_secret, song_id)
+    popularity = get_popularity("test_client_id", "test_client_secret", "test_song_id")
     assert popularity == 75
 
 
