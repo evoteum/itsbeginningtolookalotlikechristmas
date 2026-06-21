@@ -4,10 +4,10 @@ from datetime import datetime
 from requests import post, get
 
 load_dotenv()
-client_id = getenv("SPOTIFY_CLIENT_ID")
-client_secret = getenv("SPOTIFY_CLIENT_SECRET")
+our_client_id = getenv("SPOTIFY_CLIENT_ID")
+our_client_secret = getenv("SPOTIFY_CLIENT_SECRET")
 data_file_name = "data.csv"
-song_id = "2pXpURmn6zC5ZYDMms6fwa"
+this_song_id = "2pXpURmn6zC5ZYDMms6fwa"
 
 
 def get_data(client_id, client_secret, song_id):
@@ -37,9 +37,9 @@ def get_popularity(client_id, client_secret, song_id):
 
 def main():
     popularity = get_popularity(
-        client_id=client_id,
-        client_secret=client_secret,
-        song_id=song_id,
+        client_id=our_client_id,
+        client_secret=our_client_secret,
+        song_id=this_song_id,
     )
     timestamp_popularity = f"{datetime.now().isoformat()}, {popularity}\n"
     with open(data_file_name, "a") as file:
