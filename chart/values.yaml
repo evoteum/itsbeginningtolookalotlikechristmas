@@ -48,6 +48,3 @@ openbao:
     - path: itsbeginningtolookalotlikechristmas/git-deploy-key
       keys:
         - ssh_privatekey
-    - path: itsbeginningtolookalotlikechristmas/cloudflare-tunnel
-      keys:
-        - token

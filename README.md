@@ -151,6 +151,16 @@ Simply head to [ItsBeginningToLookALotLike.Christmas](http://ItsBeginningToLookA
 <!--- State anyone or anything that significantly -->
 <!--- helped with the development of this project -->
 
+## Secrets
+
+The Helm chart requires the following secrets to be pre-populated in OpenBao before install or upgrade:
+
+| Path                                                    | Key              | Description                                             |
+|---------------------------------------------------------|------------------|---------------------------------------------------------|
+| `itsbeginningtolookalotlikechristmas/spotify`           | `client_id`      | Spotify API client ID                                   |
+| `itsbeginningtolookalotlikechristmas/spotify`           | `client_secret`  | Spotify API client secret                               |
+| `itsbeginningtolookalotlikechristmas/git-deploy-key`    | `ssh_privatekey` | SSH private key for pushing `data.csv` back to the repo |
+
 ## Contributing
 
 <!--- REQUIRED -->
