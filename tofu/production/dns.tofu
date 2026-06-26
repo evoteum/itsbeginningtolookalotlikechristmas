@@ -1,12 +1,3 @@
-resource "cloudflare_record" "cname" {
-  zone_id = data.cloudflare_zone.zone.id
-  name    = var.domain
-  type    = "CNAME"
-  content = "${cloudflare_zero_trust_tunnel_cloudflared.tunnel.id}.cfargotunnel.com"
-  proxied = true
-  ttl     = 1
-}
-
 locals {
   dns_records = flatten(
     [
@@ -22,7 +13,7 @@ locals {
           "IBTLALLC is often one of the top-streamed holiday songs every December, showing its enduring appeal.",
           "Thanks for taking the time to explore the IBTLALLC project!",
         ]
-        ] } : [
+        } : [
         for record in records : {
           type    = type
           content = record
@@ -31,6 +22,15 @@ locals {
         if length(record) <= 255
       ]
   ])
+}
+
+resource "cloudflare_record" "cname" {
+  zone_id = data.cloudflare_zone.zone.id
+  name    = var.domain
+  type    = "CNAME"
+  content = "${cloudflare_zero_trust_tunnel_cloudflared.tunnel.id}.cfargotunnel.com"
+  proxied = true
+  ttl     = 1
 }
 
 resource "cloudflare_record" "dns_records" {
