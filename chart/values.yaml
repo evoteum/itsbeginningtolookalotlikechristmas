@@ -27,11 +27,6 @@ site:
   hpa:
     maxReplicas: 10
     targetCPUUtilizationPercentage: 70
-  cloudflared:
-    replicaCount: 2
-    image:
-      repository: cloudflare/cloudflared
-      tag: 2024.11.0
 
 git:
   image:
