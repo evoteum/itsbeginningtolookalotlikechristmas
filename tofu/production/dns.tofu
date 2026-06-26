@@ -24,15 +24,6 @@ locals {
   ])
 }
 
-resource "cloudflare_record" "cname" {
-  zone_id = data.cloudflare_zone.zone.id
-  name    = var.domain
-  type    = "CNAME"
-  content = "${cloudflare_zero_trust_tunnel_cloudflared.tunnel.id}.cfargotunnel.com"
-  proxied = true
-  ttl     = 1
-}
-
 resource "cloudflare_record" "dns_records" {
   for_each = { for record in local.dns_records : record.key => record }
 
