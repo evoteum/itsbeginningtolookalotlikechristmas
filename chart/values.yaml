@@ -6,8 +6,8 @@ datagather:
   git:
     repo: git@github.com:evoteum/itsbeginningtolookalotlikechristmas.git
     user:
-      name: itsbeginningtolookalotlikechristmas-bot
-      email: k8s-bot@evoteum.com
+      name: evoteum-bot
+      email: evoteum-bot@evoteum.com
 
 cloudflare:
   zoneId: "8007b9c07595e1f3fea92332637ebedc"
@@ -32,19 +32,3 @@ git:
   image:
     repository: alpine/git
     tag: 2.47.1
-
-openbao:
-  address: http://openbao-active.openbao.svc:8200
-  authPath: kubernetes
-  role: secret-initializer
-  image:
-    repository: ghcr.io/openbao/openbao
-    tag: "2"
-  requiredSecrets:
-    - path: itsbeginningtolookalotlikechristmas/spotify
-      keys:
-        - client_id
-        - client_secret
-    - path: itsbeginningtolookalotlikechristmas/git-deploy-key
-      keys:
-        - ssh_privatekey
