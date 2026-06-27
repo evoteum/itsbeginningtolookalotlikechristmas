@@ -1,34 +1,7 @@
-datagather:
-  schedule: "0 0 * * *"
-  image:
-    repository: quay.io/evoteum/itsbeginningtolookalotlikechristmas
-    tag: latest
-  git:
-    repo: git@github.com:evoteum/itsbeginningtolookalotlikechristmas.git
-    user:
-      name: evoteum-bot
-      email: evoteum-bot@evoteum.com
-
-cloudflare:
-  zoneId: "8007b9c07595e1f3fea92332637ebedc"
-
-site:
-  replicaCount: 3
-  nginx:
-    image:
-      repository: nginxinc/nginx-unprivileged
-      tag: alpine
-  gitSync:
-    image:
-      repository: registry.k8s.io/git-sync/git-sync
-      tag: v4.3.0
-    repo: https://github.com/evoteum/itsbeginningtolookalotlikechristmas.git
-    period: 60s
-  hpa:
-    maxReplicas: 10
-    targetCPUUtilizationPercentage: 70
-
-git:
-  image:
-    repository: alpine/git
-    tag: 2.47.1
+replicaCount: 3
+image:
+  repository: quay.io/evoteum/itsbeginningtolookalotlikechristmas
+  tag: latest
+hpa:
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70

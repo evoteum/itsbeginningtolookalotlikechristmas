@@ -41,10 +41,9 @@ Where [IsItChristmas.com](https://isitchristmas.com) gives you a simple yes or n
 <!--- REQUIRED -->
 
 1. Background
-2. Install
-3. Usage
-4. Contributing
-5. License
+2. Usage
+3. Contributing
+4. License
 
 <!--- ## Security -->
 <!--- OPTIONAL -->
@@ -108,18 +107,6 @@ The motivation for this project is that it is,
     - progress is better than perfection
     - Maslow's Hammer
 
-## Install
-
-<!--- Explain how to install the thing. -->
-<!--- OPTIONAL IF documentation repo -->
-<!--- ELSE REQUIRED -->
-
-If running locally, install the Python requirements
-
-```shell
-pip install -r python/requirements.txt
-```
-
 ## Usage
 
 <!--- REQUIRED -->
@@ -150,16 +137,6 @@ Simply head to [ItsBeginningToLookALotLike.Christmas](http://ItsBeginningToLookA
 <!--- OPTIONAL -->
 <!--- State anyone or anything that significantly -->
 <!--- helped with the development of this project -->
-
-## Secrets
-
-The Helm chart requires the following secrets to be pre-populated in OpenBao before install or upgrade:
-
-| Path                                                    | Key              | Description                                             |
-|---------------------------------------------------------|------------------|---------------------------------------------------------|
-| `itsbeginningtolookalotlikechristmas/spotify`           | `client_id`      | Spotify API client ID                                   |
-| `itsbeginningtolookalotlikechristmas/spotify`           | `client_secret`  | Spotify API client secret                               |
-| `itsbeginningtolookalotlikechristmas/git-deploy-key`    | `ssh_privatekey` | SSH private key for pushing `data.csv` back to the repo |
 
 ## Contributing
 
