@@ -67,25 +67,35 @@ Lot Like Christmas".
 ### How it works
 
 [ItsBeginningToLookALotLike.Christmas](http://ItsBeginningToLookALotLike.Christmas) works by
-polling the Spotify API every day to get the popularity of track ID
-`2pXpURmn6zC5ZYDMms6fwa`. We then timestamp
-this and chuck it at a pretty graph. Grab some Eggnog and watch Christmas cheer gradually spread
-throughout the land.
+polling the [Deezer API](https://developers.deezer.com/api) every day to get the popularity of
+Perry Como's "It's Beginning to Look a Lot Like Christmas". We then timestamp this and chuck it
+at a pretty graph. Grab some Eggnog and watch Christmas cheer gradually spread throughout the
+land.
 
-A `CronJob` running in the [kubernetes-lab-services](https://github.com/evoteum/kubernetes-lab-services)
-cluster (Helm chart in [`chart/`](chart/)) runs a pre-built image of `python/main.py` (built and
-pushed to Quay by the `container-build-and-push` workflow) to fetch the data, then pushes the updated
-`data.csv` back to this repo, keeping the data in git. The same chart deploys an nginx pod that
-serves the static site, kept fresh by a `git-sync` sidecar; a Cloudflare Tunnel routes public
-traffic to it.
+Previously this used the Spotify API, but Spotify began requiring a paid Premium subscription
+to access their API, making it no longer viable for this use case.
+
+The project is split across two repositories:
+
+- **[itsbeginningtolookalotlikechristmas](https://github.com/evoteum/itsbeginningtolookalotlikechristmas)**
+  (this repo): the static site, served by nginx with the data baked in, deployed via
+  Helm chart in [`chart/`](chart/) to the evoteum bare metal Kubernetes cluster. A
+  Cloudflare Tunnel routes public traffic to it.
+- **[itsbeginningtolookalotlikechristmas-datagather](https://github.com/evoteum/itsbeginningtolookalotlikechristmas-datagather)**:
+  the data gathering application; a `CronJob` that runs a pre-built image of `python/main.py`
+  (built and pushed to Quay by the `container-build-and-push` workflow) to fetch the
+  Deezer popularity data daily, then pushes the updated `data.csv` back to this repo, keeping
+  the data in git.
+
+Both are deployed to the evoteum bare metal Kubernetes cluster, managed by ArgoCD via [kubernetes-lab-services](https://github.com/evoteum/kubernetes-lab-services).
 
 ### Future improvements
 
 These could be added in the future. PRs welcome!
 
 - Local radio<br />
-  In the future, other sources will be added to further improve accuracy. Local radio stations
-  will be sampled at regular intervals for the
+  In the future, other sources could be added to further improve accuracy. Local radio stations
+  could be sampled at regular intervals for the
   [fingerprint](https://en.wikipedia.org/wiki/Acoustic_fingerprint)
   of our favourite definition of Christmastime.
 - Christmas map<br />
@@ -105,7 +115,6 @@ The motivation for this project is that it is,
     - Continuous Integration
     - Continuous Delivery - [read the CD Bible now](https://amzn.to/3Wxh2GE)
     - progress is better than perfection
-    - Maslow's Hammer
 
 ## Usage
 
@@ -143,7 +152,7 @@ Simply head to [ItsBeginningToLookALotLike.Christmas](http://ItsBeginningToLookA
 <!--- REQUIRED -->
 If you need any help, please log an issue.
 
-PRs are welcome. My only request is that everyone should "Be excellent to each other".
+PRs are welcome. Our only request is that everyone should "Be excellent to each other".
 
 ## License
 
