@@ -73,7 +73,9 @@ at a pretty graph. Grab some Eggnog and watch Christmas cheer gradually spread t
 land.
 
 Previously this used the Spotify API, but Spotify began requiring a paid Premium subscription
-to access their API, making it no longer viable for this use case.
+to access their API, making it no longer viable for this use case. As the Spotify data is
+dramatically different to the Deezer data, the Spotify data has been archived in
+[archive/spotify-data.csv](archive/spotify-data.csv).
 
 The project is split across two repositories:
 
