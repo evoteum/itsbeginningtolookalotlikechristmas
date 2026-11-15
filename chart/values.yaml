@@ -1,7 +1,7 @@
 replicaCount: 3
 image:
   repository: quay.io/evoteum/itsbeginningtolookalotlikechristmas
-  tag: 2026-11-14-9a02802
+  tag: 2026-11-15-b9c08b2
 hpa:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
